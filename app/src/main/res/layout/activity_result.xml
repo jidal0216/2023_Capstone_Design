@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <!-- Savings -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/textview_border"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/textview_savings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:text="절약한 돈"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+
+        <TextView
+            android:id="@+id/textview_savings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+    </LinearLayout>
+
+    <!-- Lifespan -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/textview_border"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/textview_lifespan_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:text="늘어난 수명"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+
+        <TextView
+            android:id="@+id/textview_lifespan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+    </LinearLayout>
+
+    <!-- Time Saved -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/textview_border"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/textview_time_saved_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:text="절약한 시간"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+
+        <TextView
+            android:id="@+id/textview_time_saved"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:background="@drawable/textview_border" />
+    </LinearLayout>
+
+</LinearLayout>
