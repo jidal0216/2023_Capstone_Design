@@ -8,12 +8,12 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_item2"
-        android:title="홈"
+        android:title="금연 팁"
         android:icon="@drawable/home"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_item3"
-        android:title="설정"
+        android:title="유틸"
         android:icon="@drawable/settings"
         app:showAsAction="always"/>
 </menu>
