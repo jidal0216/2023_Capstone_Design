@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quotes">
+        <item>금연의 시작은 오늘이죠!</item>
+        <item>담배를 버리세요. 당신의 건강을 지켜주세요.</item>
+        <item>평생을 담배와 함께하실 건가요? 지금 당장 시작하세요.</item>
+        <!-- 추가적인 글귀를 여기에 추가할 수 있습니다 -->
+    </string-array>
+</resources>
