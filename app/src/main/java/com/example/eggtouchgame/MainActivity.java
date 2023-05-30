@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
         eggImageView = findViewById(R.id.eggImageView);
         touchCountTextView = findViewById(R.id.touchCountTextView);
+
+        // 배경 이미지 설정
+        ImageView backgroundImageView = new ImageView(eggImageView.getContext());
+        backgroundImageView.setImageResource(R.drawable.background);
+        backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+        // 게임 영역을 감싸는 컨테이너에 배경 이미지 추가
+        RelativeLayout gameContainer = (RelativeLayout) eggImageView.getParent();
+        gameContainer.addView(backgroundImageView, 0); // 배경 이미지를 가장 아래에 추가
 
         eggImageView.setOnClickListener(new View.OnClickListener() {
             @Override
