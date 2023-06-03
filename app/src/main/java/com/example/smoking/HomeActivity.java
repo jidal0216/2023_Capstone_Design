@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
 
             // 통계 계산하기
             int daysSmokeFree = calculateDaysSmokeFree(smokingStartDate);
-            double savings = calculateSavings(cigaretteCount, cigarettePrice, averageSmokingAmount, smokingStartDate);
+            double savings = calculateSavings(cigaretteCount, cigarettePrice, averageSmokingAmount, daysSmokeFree);
             double lifespanIncrease = calculateLifespanIncrease(averageSmokingAmount);
             double timeGained = calculateTimeGained(averageSmokingAmount, averageSmokingTime);
             int totalCigarettesSmoked = calculateTotalCigarettesSmoked(smokingStartDate, averageSmokingAmount);
@@ -155,10 +155,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // 돈 쓴 금액
-    private double calculateSavings(int cigaretteCount, int cigarettePrice, int averageSmokingAmount, String smokingStartDate) {
+    private double calculateSavings(int cigaretteCount, int cigarettePrice, int averageSmokingAmount,int daysSmokeFree) {
         double packPrice = (double) cigarettePrice / cigaretteCount;
         double dailySavings = packPrice * averageSmokingAmount ;
-        double lastValue = Double.parseDouble(smokingStartDate.substring(smokingStartDate.length()-1));
+        double lastValue = daysSmokeFree;
         double UsePrice = dailySavings * lastValue ;
         return UsePrice;
     }
