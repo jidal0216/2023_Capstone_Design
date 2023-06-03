@@ -32,11 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    // 임시 ( 데이터값 실시간 출력 변수)
-    private Handler mHandler;
-    private Runnable mRunnable;
-    private static final int INTERVAL = 1000;
-    // 임시 ( 데이터값 실시간 출력 변수)
 
     // HomeActivity 관련
     private TextView textViewSavings;
@@ -69,20 +64,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-
-        // 임시 ( 데이터값 실시간 출력 )
-        mHandler = new Handler();
-
-        mRunnable = new Runnable() {
-            @Override
-            public void run() {
-                calculateStats();
-                mHandler.postDelayed(this, INTERVAL);
-            }
-        };
-
-        // 여기까지 임시 ( 데이터값 실시간 출력 )
 
         // 여기부터 Shake 기능
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -158,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
 
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mHandler.postDelayed(mRunnable, INTERVAL); // 임시 ( 데이터값 실시간 출력 )
+        handler.postDelayed(timerRunnable, 1000); // 임시 ( 데이터값 실시간 출력 )
     }
 
     @Override
@@ -166,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
 
         sensorManager.unregisterListener(this);
-        mHandler.removeCallbacks(mRunnable); // 임시 ( 데이터값 실시간 출력 )
+        handler.removeCallbacks(timerRunnable); // 임시 ( 데이터값 실시간 출력 )
     }
 
     private void RandomMotivation() {
@@ -283,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 long timeDifference = currentTime - startTime;
                 String formattedTimeDifference = formatTimeDifference(timeDifference);
                 textViewSmokingCessationPeriod.setText(formattedTimeDifference);
+                calculateStats();
                 handler.postDelayed(this, 1000);
             }
         };
