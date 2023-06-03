@@ -131,12 +131,27 @@ public class HomeActivity extends AppCompatActivity {
                 long timeDifference = currentTime - startTime;
                 String formattedTimeDifference = formatTimeDifference(timeDifference);
                 textViewSmokingCessationPeriod.setText(formattedTimeDifference);
+                calculateStats();
+
 
                 handler.postDelayed(this, 1000);
             }
         };
 
         handler.postDelayed(timerRunnable, 1000);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        handler.postDelayed(timerRunnable, 1000); // 임시 ( 데이터값 실시간 출력 )
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(timerRunnable); // 임시 ( 데이터값 실시간 출력 )
     }
 
     // 총 흡연 기간
