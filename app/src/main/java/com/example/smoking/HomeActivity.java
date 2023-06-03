@@ -1,8 +1,12 @@
 package com.example.smoking;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,9 +28,17 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textViewTotalCigarettesSmoked;
     private TextView textViewLifespanReduction;
     private TextView textViewTimeLoss;
-    private TextView textViewSavingsPerDay; // 추가된 부분
+    private TextView textViewSmokingCessationPeriod;
+    private TextView textViewSavingMoney;
 
-    private SharedPreferences sharedPreferences;
+
+    private DatabaseHelper databaseHelper;
+    private Handler handler;
+    private Runnable timerRunnable;
+    private long startTime;
+
+    private static final String TIMER_PREFS = "timer_prefs";
+    private static final String START_TIME_KEY = "start_time_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,129 +52,258 @@ public class HomeActivity extends AppCompatActivity {
         textViewTotalCigarettesSmoked = findViewById(R.id.textViewTotalCigarettesSmoked);
         textViewLifespanReduction = findViewById(R.id.textViewLifespanReduction);
         textViewTimeLoss = findViewById(R.id.textViewTimeLoss);
+        textViewSmokingCessationPeriod = findViewById(R.id.textViewsmokingcessationperiod);
+        textViewSavingMoney = findViewById(R.id.textViewSavingMoney);
 
+        databaseHelper = new DatabaseHelper(this);
+        handler = new Handler();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // SharedPreferences에서 시작 시간을 복원합니다.
+        SharedPreferences prefs = getSharedPreferences(TIMER_PREFS, MODE_PRIVATE);
+        startTime = prefs.getLong(START_TIME_KEY, System.currentTimeMillis());
 
         calculateStats();
+        startTimer();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // 앱이 종료될 때 시작 시간을 SharedPreferences에 저장합니다.
+        SharedPreferences prefs = getSharedPreferences(TIMER_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(START_TIME_KEY, startTime);
+        editor.apply();
     }
 
     private void calculateStats() {
-        // SharedPreferences에서 흡연 정보 가져오기
-        int averageSmokingAmount = sharedPreferences.getInt("averageSmokingAmount", 0);
-        int cigaretteCount = sharedPreferences.getInt("cigaretteCount", 0);
-        int cigarettePrice = sharedPreferences.getInt("cigarettePrice", 0);
-        String smokingStartDate = sharedPreferences.getString("smokingStartDate", "");
-        int averageSmokingTime = sharedPreferences.getInt("averageSmokingTime", 0);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        // 통계 계산하기
-        int daysSmokeFree = calculateDaysSmokeFree(smokingStartDate);
-        double savings = calculateSavings(cigaretteCount, cigarettePrice, averageSmokingAmount);
-        double lifespanIncrease = calculateLifespanIncrease(averageSmokingAmount);
-        double timeGained = calculateTimeGained(averageSmokingAmount, averageSmokingTime);
-        int totalCigarettesSmoked = calculateTotalCigarettesSmoked(smokingStartDate, averageSmokingAmount);
-        double lifespanReduction = calculateLifespanReduction(averageSmokingAmount);
-        long timeLoss = calculateTimeLoss(smokingStartDate);
+        // 데이터베이스에서 흡연 정보 가져오기
+        Cursor cursor = db.rawQuery("SELECT * FROM smoking ORDER BY id DESC LIMIT 1", null);
+        if (cursor.moveToFirst()) {
+            @SuppressLint("Range") int averageSmokingAmount = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AVERAGE_SMOKING_AMOUNT));
+            @SuppressLint("Range") int cigaretteCount = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CIGARETTE_COUNT));
+            @SuppressLint("Range") int cigarettePrice = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CIGARETTE_PRICE));
+            @SuppressLint("Range") String smokingStartDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_SMOKING_START_DATE));
+            @SuppressLint("Range") int averageSmokingTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AVERAGE_SMOKING_TIME));
+
+            // 통계 계산하기
+            int daysSmokeFree = calculateDaysSmokeFree(smokingStartDate);
+            double savings = calculateSavings(cigaretteCount, cigarettePrice, averageSmokingAmount, smokingStartDate);
+            double lifespanIncrease = calculateLifespanIncrease(averageSmokingAmount);
+            double timeGained = calculateTimeGained(averageSmokingAmount, averageSmokingTime);
+            int totalCigarettesSmoked = calculateTotalCigarettesSmoked(smokingStartDate, averageSmokingAmount);
+            double lifespanReduction = calculateLifespanReduction(averageSmokingAmount, daysSmokeFree);
+            long timeLoss = calculateTimeLoss(averageSmokingAmount,averageSmokingTime,daysSmokeFree);
+            long timeDifference = calculateTimeDifference();
+            double savingMoney = calculateSavingMoney(cigarettePrice, cigaretteCount, averageSmokingAmount);
 
 
-        // 값 포맷팅하기
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        NumberFormat numberFormat = NumberFormat.getInstance();
 
-        // TextView에 계산된 값 설정하기
-        textViewSavings.setText(formatSavings(savings));
-        textViewLifespanIncrease.setText(decimalFormat.format(lifespanIncrease) + " 년");
-        textViewTimeGained.setText(decimalFormat.format(timeGained) + " 분");
-        textViewDaysSmokeFree.setText(numberFormat.format(daysSmokeFree) + " 일");
-        textViewTotalCigarettesSmoked.setText(numberFormat.format(totalCigarettesSmoked) + " 개비");
-        textViewLifespanReduction.setText(decimalFormat.format(lifespanReduction) + " 분");
-        textViewTimeLoss.setText(formatTimeLoss(timeLoss));
+            // 값 포맷팅하기
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            String formattedTimeDifference = formatTimeDifference(timeDifference);
 
+            // TextView에 계산된 값 설정하기
+            textViewSavings.setText(formatSavings(savings)) ;  //돈 쓴 금액
+            textViewLifespanIncrease.setText(formatLifespanIncrease(lifespanIncrease) );  // 예상 수명 증가
+            textViewTimeGained.setText(formatTimeGained(timeGained)); //흡연 중단으로 얻은 시간
+            textViewDaysSmokeFree.setText(numberFormat.format(daysSmokeFree) + " 일"); //총 흡연 기간
+            textViewTotalCigarettesSmoked.setText(numberFormat.format(totalCigarettesSmoked) + " 개비"); //총 흡연량
+            textViewLifespanReduction.setText(formatLifespanReduction((long) lifespanReduction));  //흡연으로 인한 수명 감소
+            textViewTimeLoss.setText(formatTimeLoss(timeLoss));  // 흡연으로 인한 시간 손실
+            textViewSmokingCessationPeriod.setText(formattedTimeDifference); // 금연 기간
+            textViewSavingMoney.setText(formatSavings(savingMoney)); // 절약 금액
+        }
+
+        cursor.close();
+        db.close();
     }
 
+    private void startTimer() {
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long currentTime = System.currentTimeMillis();
+                long timeDifference = currentTime - startTime;
+                String formattedTimeDifference = formatTimeDifference(timeDifference);
+                textViewSmokingCessationPeriod.setText(formattedTimeDifference);
+
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        handler.postDelayed(timerRunnable, 1000);
+    }
+
+    // 총 흡연 기간
     private int calculateDaysSmokeFree(String smokingStartDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
-            Date startDate = sdf.parse(smokingStartDate);
+            Date startDate = dateFormat.parse(smokingStartDate);
             Date currentDate = new Date();
-            long diffInMilliseconds = currentDate.getTime() - startDate.getTime();
-            return (int) TimeUnit.DAYS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
+            long timeDifference = currentDate.getTime() - startDate.getTime();
+            int daysSmokeFree = (int) TimeUnit.MILLISECONDS.toDays(timeDifference);
+            return daysSmokeFree > 0 ? daysSmokeFree : 1; // 최소 1일로 설정
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
 
-    private double calculateSavings(int cigaretteCount, int cigarettePrice, int averageSmokingAmount) {
+    // 돈 쓴 금액
+    private double calculateSavings(int cigaretteCount, int cigarettePrice, int averageSmokingAmount, String smokingStartDate) {
         double packPrice = (double) cigarettePrice / cigaretteCount;
-        double dailySavings = packPrice * averageSmokingAmount;
-        int daysSmokeFree = calculateDaysSmokeFree(sharedPreferences.getString("smokingStartDate", ""));
-        return dailySavings * daysSmokeFree;
+        double dailySavings = packPrice * averageSmokingAmount ;
+        double lastValue = Double.parseDouble(smokingStartDate.substring(smokingStartDate.length()-1));
+        double UsePrice = dailySavings * lastValue ;
+        return UsePrice;
     }
-
+    //돈 쓴 금액 단위 변경 + 값 포매팅
     private String formatSavings(double savings) {
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         return decimalFormat.format(savings) + " 원";
     }
-
+    // 예상 수명 증가
     private double calculateLifespanIncrease(int averageSmokingAmount) {
-        return averageSmokingAmount * 0.001; // 하루 평균 한 개비 당 0.1년 수명 증가로 가정
+        long OneDaySmoke = averageSmokingAmount ;
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - startTime;
+        double timeInSeconds = (double) timeDifference / 1000  ;
+        double lifespanIncrease = timeInSeconds * OneDaySmoke * 1 / 1440;  // in seconds
+
+        // 수명 증가가 수명 감소보다 크면 수명 감소 값으로 변경
+        double lifespanReduction = calculateLifespanReduction(averageSmokingAmount, (int) timeInSeconds);
+        if (lifespanIncrease > lifespanReduction) {
+            lifespanIncrease = lifespanReduction;
+            System.out.println("흡연으로 인한 수명 손실이 거의 다 회복되었습니다.고생하셨습니다.");
+        }
+
+        return lifespanIncrease;
     }
 
+
+    // 수명 증가 포맷팅
+    private String formatLifespanIncrease(double lifespanIncrease) {
+        long totalSeconds = (long) lifespanIncrease;
+        long days = TimeUnit.SECONDS.toDays(totalSeconds);
+        long hours = TimeUnit.SECONDS.toHours(totalSeconds) % 24;
+        long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) % 60;
+        long seconds = totalSeconds % 60;
+
+        return String.format(Locale.getDefault(), "%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+    }
+
+    // 금연으로 얻은 시간
     private double calculateTimeGained(int averageSmokingAmount, int averageSmokingTime) {
-        return averageSmokingAmount * averageSmokingTime;
+        long smokeDayTime = averageSmokingAmount * averageSmokingTime ;
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - startTime;
+        double timeInSeconds = (double) timeDifference /1000 ;
+        return smokeDayTime * timeInSeconds / 1440 ;  // in seconds
     }
 
+    // 금연으로 얻은 시간 포맷팅
+    private String formatTimeGained(double timeGained) {
+        long totalSeconds = (long) timeGained;
+        long days = TimeUnit.SECONDS.toDays(totalSeconds);
+        long hours = TimeUnit.SECONDS.toHours(totalSeconds) % 24;
+        long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) % 60;
+        long seconds = totalSeconds % 60;
+
+        return String.format(Locale.getDefault(), "%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+    }
+
+// 총 담배 개수
     private int calculateTotalCigarettesSmoked(String smokingStartDate, int averageSmokingAmount) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            Date startDate = sdf.parse(smokingStartDate);
-            Date currentDate = new Date();
-            long diffInMilliseconds = currentDate.getTime() - startDate.getTime();
-            int daysSmokeFree = (int) TimeUnit.DAYS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
-            return daysSmokeFree * averageSmokingAmount;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        int daysSmokeFree = calculateDaysSmokeFree(smokingStartDate);
+        return daysSmokeFree * averageSmokingAmount;
+    }
+    // 흡연으로 인한 수명 감소
+    private double calculateLifespanReduction(int averageSmokingAmount, int daysSmokeFree) {
+        return averageSmokingAmount * 11 * daysSmokeFree;
     }
 
-    private double calculateLifespanReduction(int averageSmokingAmount) {
-        return averageSmokingAmount * 5.0 / 60.0; // 하루 평균 한 개비 당 5분 수명 감소로 가정
+    // 수명 감소 포맷팅
+    private String formatLifespanReduction(double lifespanReduction) {
+        long totalMinutes = (long) lifespanReduction;
+        long days = TimeUnit.MINUTES.toDays(totalMinutes);
+        long hours = TimeUnit.MINUTES.toHours(totalMinutes) % 24;
+        long minutes = totalMinutes % 60;
+
+        return String.format(Locale.getDefault(), "%d일 %d시간 %d분", days, hours, minutes);
     }
 
-    private long calculateTimeLoss(String smokingStartDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            Date startDate = sdf.parse(smokingStartDate);
-            Date saveDate = new Date(sharedPreferences.getLong("saveDate", 0));
-            long diffInMilliseconds = startDate.getTime() - saveDate.getTime();
-            long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMilliseconds);
-            long hours = diffInMinutes / 60; // 시간 단위 계산
-            long minutes = diffInMinutes % 60; // 분 단위 계산
-            return TimeUnit.HOURS.toMillis(hours) + TimeUnit.MINUTES.toMillis(minutes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+    // 시간 손실
+    private long calculateTimeLoss(int averageSmokingAmount, int averageSmokingTime ,int daysSmokeFree) {
+        long smokeDayTime = averageSmokingAmount * averageSmokingTime;
+        return  daysSmokeFree * smokeDayTime;
+}
 
-
+//흡연으로 인한 시간 손실 포매팅
     private String formatTimeLoss(long timeLoss) {
-        long hours = TimeUnit.MILLISECONDS.toHours(timeLoss);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLoss) - TimeUnit.HOURS.toMinutes(hours);
-        return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
+        long days = TimeUnit.MINUTES.toDays(timeLoss);
+        long hours = TimeUnit.MINUTES.toHours(timeLoss) % 24;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLoss) % 60;
+        return String.format(Locale.getDefault(), "%d일 %d시간 %d분", days, hours, minutes);
+    }
+
+//금연 기간
+    private long calculateTimeDifference() {
+        long currentTime = System.currentTimeMillis();
+        return currentTime - startTime;
+    }
+//금연 기간 포매팅
+    private String formatTimeDifference(long timeDifference) {
+        long days = TimeUnit.MILLISECONDS.toDays(timeDifference);
+        long hours = TimeUnit.MILLISECONDS.toHours(timeDifference) % 24;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference) % 60;
+
+        return String.format(Locale.getDefault(), "%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+    }
+//절약금액
+    private double calculateSavingMoney(int cigarettePrice, int cigaretteCount, int averageSmokingAmount) {
+        double packPrice = (double) cigarettePrice / cigaretteCount;
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - startTime;
+        double timeInSeconds = (double) timeDifference / 1000 ;
+
+        // 시간이 흐를수록 절약 금액이 증가하도록 계산
+        double savingMoney = packPrice * averageSmokingAmount / 86400 * timeInSeconds;
+
+        return savingMoney;
+    }
+
+
+    public void onButtonEditProfileClicked(View view) {
+        // 프로필 수정 화면으로 이동
+    }
+
+    public void onButtonQuitSmokingClicked(View view) {
+        // 금연하기 버튼 동작 처리
     }
 
     private void clearSavedData() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); // SharedPreferences의 모든 데이터를 삭제합니다.
-        editor.apply(); // 변경 사항을 저장합니다.
-        calculateStats(); // 변경된 데이터에 따라 통계를 다시 계산합니다.
-    }
+        databaseHelper.clearSavedData();
+        calculateStats();
+        // 시작 시간 재설정
+        startTime = System.currentTimeMillis();
 
-    // "데이터 초기화" 버튼 클릭 시 호출되는 메소드
+        // 초기화된 시간으로 텍스트 뷰 업데이트
+        String formattedTimeDifference = formatTimeDifference(0);
+        textViewSmokingCessationPeriod.setText(formattedTimeDifference);
+
+
+    }
+    // "데이터 초기화" 버튼을 클릭했을 때 호출되는 메서드
     public void onClearDataButtonClick(View view) {
         clearSavedData();
+
+        Intent intent = new Intent(this, SmokeActivity.class);
+        startActivity(intent);
     }
 }

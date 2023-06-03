@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewLifespanIncrease"
         android:layout_marginTop="16dp"
-        android:text="흡연 중단으로 얻은 시간"
+        android:text="금연으로 얻은 시간"
         android:textSize="18sp"
         android:layout_alignParentLeft="true" />
 
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewDaysSmokeFree"
         android:layout_marginTop="16dp"
-        android:text="총 흡연 량"
+        android:text="피운 담배 개수"
         android:textSize="18sp"
         android:layout_alignParentLeft="true" />
 
@@ -168,12 +168,64 @@
         android:text="시간 손실"
         android:textSize="18sp"
         android:textStyle="bold" />
+    <!-- 왼쪽에 위치한 설명 TextView -->
+    <TextView
+        android:id="@+id/textViewsmokingcessationperiodDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewTimeLossDescription"
+        android:layout_marginTop="16dp"
+        android:text="금연 기간"
+        android:textSize="18sp"
+        android:layout_alignParentLeft="true" />
+
+    <!-- 오른쪽에 위치한 값 TextView -->
+    <TextView
+        android:id="@+id/textViewsmokingcessationperiod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewTimeLoss"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/textViewsmokingcessationperiodDescription"
+        android:text="금연 기간"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <!-- 왼쪽에 위치한 설명 TextView -->
+    <TextView
+        android:id="@+id/textViewSavingMoneyDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewsmokingcessationperiodDescription"
+        android:layout_marginTop="16dp"
+        android:text="지금까지 절약 금액"
+        android:textSize="18sp"
+        android:layout_alignParentLeft="true" />
+
+    <!-- 오른쪽에 위치한 값 TextView -->
+    <TextView
+        android:id="@+id/textViewSavingMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewsmokingcessationperiod"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/textViewSavingMoneyDescription"
+        android:text="절약 금액"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <!-- 왼쪽에 위치한 설명 TextView -->
+
+
+
+
+
 
     <Button
         android:id="@+id/buttonClearData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewTimeLoss"
+        android:layout_below="@+id/textViewSavingMoneyDescription"
         android:text="데이터 초기화"
         android:onClick="onClearDataButtonClick" />
 
