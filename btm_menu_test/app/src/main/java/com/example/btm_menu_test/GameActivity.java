@@ -17,11 +17,20 @@ public class GameActivity extends AppCompatActivity {
 
 
         Button imageButton1 = (Button) findViewById(R.id.egggame_btn);
+        Button imageButton2 = (Button) findViewById(R.id.egggame_btn2);
 
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EggSub.class);
+                startActivity(intent);
+            }
+        });
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SmokeTest.class);
                 startActivity(intent);
             }
         });

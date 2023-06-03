@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextAverageSmokingAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="하루 평균 흡연량 (개비당)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextCigaretteCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextAverageSmokingAmount"
+        android:hint="담배 개비(팩당)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextCigarettePrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextCigaretteCount"
+        android:hint="담배 가격 (팩당)"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/buttonSelectDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextCigarettePrice"
+        android:text="흡연 시작 날짜 선택" />
+
+    <EditText
+        android:id="@+id/editTextSelectedDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonSelectDate"
+        android:hint="흡연 시작 날짜 (YYYY-MM-DD)"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/editTextAverageSmokingTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextSelectedDate"
+        android:hint="평균 흡연 시간 (개비당)"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextAverageSmokingTime"
+        android:layout_centerHorizontal="true"
+        android:text="Save" />
+
+</RelativeLayout>
+
