@@ -1,7 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <!-- 왼쪽에 위치한 설명 TextView -->
     <TextView
@@ -215,20 +217,35 @@
         android:textSize="18sp"
         android:textStyle="bold" />
     <!-- 왼쪽에 위치한 설명 TextView -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/onButtonEditProfile"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="1"
+            android:onClick="onButtonEditProfileClicked"
+            android:text="흡연 정보 수정"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonClearData" />
 
-
-
-
-
-    <Button
-        android:id="@+id/buttonClearData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewSavingMoneyDescription"
-        android:text="데이터 초기화"
-        android:onClick="onClearDataButtonClick" />
-
-
+        <Button
+            android:id="@+id/buttonClearData"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="1"
+            android:onClick="onClearDataButtonClick"
+            android:text="금연 실패"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/onButtonEditProfile"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

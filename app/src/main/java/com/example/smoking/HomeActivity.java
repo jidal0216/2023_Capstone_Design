@@ -1,6 +1,7 @@
 package com.example.smoking;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
@@ -145,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
 
 
-        handler.postDelayed(timerRunnable, 1000); // 임시 ( 데이터값 실시간 출력 )
+        handler.postDelayed(timerRunnable, 1000); //  ( 데이터값 실시간 출력 )
     }
 
     @Override
@@ -291,32 +294,50 @@ public class HomeActivity extends AppCompatActivity {
         return savingMoney;
     }
 
-
+    // 흡연 정보 수정 화면으로 이동
     public void onButtonEditProfileClicked(View view) {
-        // 프로필 수정 화면으로 이동
+        databaseHelper.clearSavedData();
+
+        Intent intent = new Intent(this, SmokeActivity.class);
+        startActivity(intent);
+
     }
 
     public void onButtonQuitSmokingClicked(View view) {
         // 금연하기 버튼 동작 처리
     }
-
+//데이터 초기화 메서드
     private void clearSavedData() {
-        databaseHelper.clearSavedData();
-        calculateStats();
+
+
         // 시작 시간 재설정
         startTime = System.currentTimeMillis();
 
-        // 초기화된 시간으로 텍스트 뷰 업데이트
+        // 예상 수명 증가 , 금연으로 얻은 시간, 금연 기간 초기화 후 텍스트 뷰 업데이트
         String formattedTimeDifference = formatTimeDifference(0);
         textViewSmokingCessationPeriod.setText(formattedTimeDifference);
-
-
+        textViewLifespanIncrease.setText(formatLifespanIncrease(0.0));
+        textViewTimeGained.setText(formatTimeGained(0.0));
     }
-    // "데이터 초기화" 버튼을 클릭했을 때 호출되는 메서드
+    // "금연 실패" 버튼을 클릭했을 때 호출되는 메서드
     public void onClearDataButtonClick(View view) {
-        clearSavedData();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("금연 초기화")
+                .setMessage("금연 데이터를 초기화하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // "예"를 선택한 경우
+                        Toast.makeText(getApplicationContext(), "금연 초기화 됩니다.", Toast.LENGTH_SHORT).show();
+                        // 금연 데이터 초기화
+                        clearSavedData();
+                        Toast.makeText(getApplicationContext(), "이번에는 꼭 금연 하시길 바랍니다.", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("아니요", null)
+                .show();
 
-        Intent intent = new Intent(this, SmokeActivity.class);
-        startActivity(intent);
+
+
     }
 }

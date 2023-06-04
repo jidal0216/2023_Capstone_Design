@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ public class SmokeActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper; // SQLite 데이터베이스  클래스
 
-    private Calendar selectedDate; // 선택한 날짜를 저장하는 변수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
