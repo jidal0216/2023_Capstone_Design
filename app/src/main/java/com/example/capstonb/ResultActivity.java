@@ -5,15 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.example.capstonb.DatabaseHelper;
 
 
 public class ResultActivity extends AppCompatActivity {
     private TextView savingsTextView;
     private TextView lifespanTextView;
     private TextView timeSavedTextView;
-
-    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +21,22 @@ public class ResultActivity extends AppCompatActivity {
         lifespanTextView = findViewById(R.id.textview_lifespan);
         timeSavedTextView = findViewById(R.id.textview_time_saved);
 
-        databaseHelper = new DatabaseHelper(this);
+
+
+
+        Intent intent = new Intent(Home_Activity.this, ResultActivity.class);
+        intent.putExtra("averageSmokingAmount", averageSmokingAmount);
+        intent.putExtra("cigaretteCount", cigaretteCount);
+        intent.putExtra("averageSmokingTime", averageSmokingTime);
+        intent.putExtra("cigarettePrice", cigarettePrice);
+        startActivity(intent);
 
         Intent intent = getIntent();
-        int averageCigarettes = intent.getIntExtra("averageCigarettes", 0);
-        int cigarettesPerPack = intent.getIntExtra("cigarettesPerPack", 0);
-        int startYear = intent.getIntExtra("startYear", 0);
+        int averageSmokingAmount = intent.getIntExtra("averageSmokingAmount", 0);
+        int cigaretteCount = intent.getIntExtra("cigaretteCount", 0);
         int averageSmokingTime = intent.getIntExtra("averageSmokingTime", 0);
-        int averageSmokingPrice = intent.getIntExtra("averageSmokingPrice", 0);
+        int cigarettePrice = intent.getIntExtra("cigarettePrice", 0);
+
 
         StringBuilder savingsBuilder = new StringBuilder();
         StringBuilder lifespanBuilder = new StringBuilder();
@@ -45,15 +50,15 @@ public class ResultActivity extends AppCompatActivity {
         timeSavedBuilder.append("절약한 시간\n");
 
         for (int yearsPassed : years) {
-            int packsPerYear = (averageCigarettes * 365) / cigarettesPerPack;
-            int totalSavings = packsPerYear * averageSmokingPrice * yearsPassed;
+            int packsPerYear = (averageSmokingAmount * 365) / cigaretteCount;
+            int totalSavings = packsPerYear * cigarettePrice * yearsPassed;
 
-            int lifespanIncrease = ((averageCigarettes * 0 * 11) / 24); // 0이라고 적혀져 있는 부분을 금연한 시간으로 바꿔야합니다.
+            int lifespanIncrease = ((averageSmokingAmount * yearsPassed * 11) / 24);
             int lifespanDays = lifespanIncrease / (24 * 60);
             int lifespanHours = (lifespanIncrease % (24 * 60)) / 60;
             int lifespanMinutes = (lifespanIncrease % (24 * 60)) % 60;
 
-            int minutesPerYear = averageCigarettes * averageSmokingTime * 365;
+            int minutesPerYear = averageSmokingAmount * averageSmokingTime * 365;
             int timeSaved = minutesPerYear * yearsPassed;
             int timeSavedDays = timeSaved / (24 * 60);
             int timeSavedHours = (timeSaved % (24 * 60)) / 60;

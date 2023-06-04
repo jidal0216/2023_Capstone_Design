@@ -5,11 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import com.example.capstonb.DatabaseHelper;
+import android.content.SharedPreferences;
 public class EffectActivity extends AppCompatActivity {
     private LinearLayout effectContainer;
-    private DatabaseHelper databaseHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +15,9 @@ public class EffectActivity extends AppCompatActivity {
 
         effectContainer = findViewById(R.id.effectContainer);
         // 금연 시간에 따라 효과를 표시합니다.
-        int quitTimeInMinutes = databaseHelper.getQuitTime();  // -> 이 변수를 금연한 시간으로 바꿔야함.(일단 임의로 설정해놨습니다.)
+        // SharedPreference에서 값을 가져옵니다.
+        SharedPreferences sharedPreferences = getSharedPreferences("timer_prefs", MODE_PRIVATE);
+        int quitTimeInMinutes = sharedPreferences.getInt("quitTimeInMinutes", 0);  // -> 이 변수를 금연한 시간으로 바꿔야함.(일단 임의로 설정해놨습니다.)
         displayEffectsForQuitTime(quitTimeInMinutes);
     }
     private void displayEffectsForQuitTime(int quitTimeInMinutes) {
