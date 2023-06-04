@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import com.example.capstonb.DatabaseHelper;
 public class EffectActivity extends AppCompatActivity {
     private LinearLayout effectContainer;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +17,7 @@ public class EffectActivity extends AppCompatActivity {
 
         effectContainer = findViewById(R.id.effectContainer);
         // 금연 시간에 따라 효과를 표시합니다.
-        int quitTimeInMinutes = 3242424;  // -> 이 변수를 금연한 시간으로 바꿔야함.(일단 임의로 설정해놨습니다.)
+        int quitTimeInMinutes = databaseHelper.getQuitTime();  // -> 이 변수를 금연한 시간으로 바꿔야함.(일단 임의로 설정해놨습니다.)
         displayEffectsForQuitTime(quitTimeInMinutes);
     }
     private void displayEffectsForQuitTime(int quitTimeInMinutes) {

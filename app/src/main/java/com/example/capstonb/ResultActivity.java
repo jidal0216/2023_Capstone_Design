@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import com.example.capstonb.DatabaseHelper;
+
 
 public class ResultActivity extends AppCompatActivity {
     private TextView savingsTextView;
     private TextView lifespanTextView;
     private TextView timeSavedTextView;
+
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,8 @@ public class ResultActivity extends AppCompatActivity {
         savingsTextView = findViewById(R.id.textview_savings);
         lifespanTextView = findViewById(R.id.textview_lifespan);
         timeSavedTextView = findViewById(R.id.textview_time_saved);
+
+        databaseHelper = new DatabaseHelper(this);
 
         Intent intent = getIntent();
         int averageCigarettes = intent.getIntExtra("averageCigarettes", 0);
@@ -42,7 +48,7 @@ public class ResultActivity extends AppCompatActivity {
             int packsPerYear = (averageCigarettes * 365) / cigarettesPerPack;
             int totalSavings = packsPerYear * averageSmokingPrice * yearsPassed;
 
-            int lifespanIncrease = (averageSmokingTime * 365) * yearsPassed;
+            int lifespanIncrease = ((averageCigarettes * 0 * 11) / 24); // 0이라고 적혀져 있는 부분을 금연한 시간으로 바꿔야합니다.
             int lifespanDays = lifespanIncrease / (24 * 60);
             int lifespanHours = (lifespanIncrease % (24 * 60)) / 60;
             int lifespanMinutes = (lifespanIncrease % (24 * 60)) % 60;
