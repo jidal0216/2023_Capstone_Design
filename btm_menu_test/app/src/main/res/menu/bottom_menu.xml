@@ -16,5 +16,9 @@
         android:title="유틸"
         android:icon="@drawable/settings"
         app:showAsAction="always"/>
-
+    <item
+        android:id="@+id/menu_item4"
+        android:title="미션"
+        android:icon="@drawable/trophy"
+        app:showAsAction="always"/>
 </menu>

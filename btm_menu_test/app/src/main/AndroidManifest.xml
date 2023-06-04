@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,19 +23,27 @@
             android:name=".CalenderActivity"
             android:theme="@style/CustomActivityTheme1" />
         <activity android:name=".LinkActivity" />
-        <activity android:name=".ImageActivity"
+        <activity
+            android:name=".ImageActivity"
             android:theme="@style/CustomActivityTheme1"/>
-        <activity android:name=".TipActivity"
+        <activity
+            android:name=".TipActivity"
             android:theme="@style/CustomActivityTheme1"/>
-        <activity android:name=".SupplementsActivity"
+        <activity
+            android:name=".SupplementsActivity"
             android:theme="@style/CustomActivityTheme1"/>
         <activity android:name=".EggSub"/>
         <activity android:name=".GameActivity"/>
         <activity android:name=".eggTouchGame"/>
         <activity android:name=".SmokeTest"/>
+        <activity android:name=".MyAlarmActivity"/>
+        <activity android:name=".MicTestActivity"/>
+        <activity
+            android:name=".MissionActivity"
+            android:theme="@style/CustomActivityTheme1"/>
         <activity
             android:name=".SmokeActivity"
-            android:exported="true">
+            android:exported="true" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -42,5 +52,6 @@
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
 </manifest>

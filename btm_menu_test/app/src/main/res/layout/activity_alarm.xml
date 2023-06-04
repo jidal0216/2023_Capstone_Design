@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="알람설정 화면입니다"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/daysTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/interval2min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2분마다" />
+
+
+        <RadioButton
+            android:id="@+id/interval5min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5분마다" />
+
+        <RadioButton
+            android:id="@+id/interval15min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15분마다" />
+
+        <RadioButton
+            android:id="@+id/interval30min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30분마다" />
+
+        <RadioButton
+            android:id="@+id/interval1hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1시간마다" />
+
+        <RadioButton
+            android:id="@+id/interval2hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2시간마다" />
+
+        <RadioButton
+            android:id="@+id/interval12hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12시간마다" />
+
+        <RadioButton
+            android:id="@+id/interval24hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24시간마다" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="알람 시작" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="알람 해제" />
+
+
+
+
+</RelativeLayout>

@@ -73,7 +73,7 @@ public class ImageActivity extends AppCompatActivity {
     }
 
 
-
+    // url 받아서 LinkActivity로 전달
     private void openWebView(String url) {
         Intent intent = new Intent(this, LinkActivity.class);
         intent.putExtra("url", url);

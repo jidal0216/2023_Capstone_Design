@@ -18,6 +18,7 @@ public class GameActivity extends AppCompatActivity {
 
         Button imageButton1 = (Button) findViewById(R.id.egggame_btn);
         Button imageButton2 = (Button) findViewById(R.id.egggame_btn2);
+        Button imageButton3 = (Button) findViewById(R.id.egggame_btn3);
 
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +32,14 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SmokeTest.class);
+                startActivity(intent);
+            }
+        });
+
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MicTestActivity.class);
                 startActivity(intent);
             }
         });
