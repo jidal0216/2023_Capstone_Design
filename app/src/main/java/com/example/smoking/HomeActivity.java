@@ -94,16 +94,16 @@ public class HomeActivity extends AppCompatActivity {
             double savings = calculateSavings(cigaretteCount, cigarettePrice, averageSmokingAmount, daysSmokeFree);
             double lifespanIncrease = calculateLifespanIncrease(averageSmokingAmount);
             double timeGained = calculateTimeGained(averageSmokingAmount, averageSmokingTime);
-            int totalCigarettesSmoked = calculateTotalCigarettesSmoked(smokingStartDate, averageSmokingAmount);
+            int totalCigarettesSmoked = calculateTotalCigarettesSmoked(daysSmokeFree, averageSmokingAmount);
             double lifespanReduction = calculateLifespanReduction(averageSmokingAmount, daysSmokeFree);
-            long timeLoss = calculateTimeLoss(averageSmokingAmount,averageSmokingTime,daysSmokeFree);
+            long timeLoss = calculateTimeLoss(totalCigarettesSmoked,averageSmokingTime);
             long timeDifference = calculateTimeDifference();
             double savingMoney = calculateSavingMoney(cigarettePrice, cigaretteCount, averageSmokingAmount);
 
 
 
             // 값 포맷팅하기
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
             NumberFormat numberFormat = NumberFormat.getInstance();
             String formattedTimeDifference = formatTimeDifference(timeDifference);
 
@@ -151,7 +151,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        handler.removeCallbacks(timerRunnable); // 임시 ( 데이터값 실시간 출력 )
+        handler.removeCallbacks(timerRunnable); //  ( 데이터값 실시간 출력 )
     }
 
     // 총 흡연 기간
@@ -173,8 +173,7 @@ public class HomeActivity extends AppCompatActivity {
     private double calculateSavings(int cigaretteCount, int cigarettePrice, int averageSmokingAmount,int daysSmokeFree) {
         double packPrice = (double) cigarettePrice / cigaretteCount;
         double dailySavings = packPrice * averageSmokingAmount ;
-        double lastValue = daysSmokeFree;
-        double UsePrice = dailySavings * lastValue ;
+        double UsePrice = dailySavings * daysSmokeFree ;
         return UsePrice;
     }
     //돈 쓴 금액 단위 변경 + 값 포매팅
@@ -233,8 +232,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 // 총 담배 개수
-    private int calculateTotalCigarettesSmoked(String smokingStartDate, int averageSmokingAmount) {
-        int daysSmokeFree = calculateDaysSmokeFree(smokingStartDate);
+    private int calculateTotalCigarettesSmoked(int daysSmokeFree, int averageSmokingAmount) {
         return daysSmokeFree * averageSmokingAmount;
     }
     // 흡연으로 인한 수명 감소
@@ -253,16 +251,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // 시간 손실
-    private long calculateTimeLoss(int averageSmokingAmount, int averageSmokingTime ,int daysSmokeFree) {
-        long smokeDayTime = averageSmokingAmount * averageSmokingTime;
-        return  daysSmokeFree * smokeDayTime;
+    private long calculateTimeLoss(int totalCigarettesSmoked ,int averageSmokingTime) {
+        return  averageSmokingTime * totalCigarettesSmoked ;
 }
 
-//흡연으로 인한 시간 손실 포매팅
+    // 흡연으로 인한 시간 손실 포매팅
     private String formatTimeLoss(long timeLoss) {
+        long totalMinutes = (long) timeLoss;
         long days = TimeUnit.MINUTES.toDays(timeLoss);
         long hours = TimeUnit.MINUTES.toHours(timeLoss) % 24;
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLoss) % 60;
+        long minutes = totalMinutes % 60;
         return String.format(Locale.getDefault(), "%d일 %d시간 %d분", days, hours, minutes);
     }
 
