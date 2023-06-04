@@ -33,7 +33,8 @@
             android:name=".SupplementsActivity"
             android:theme="@style/CustomActivityTheme1"/>
         <activity android:name=".EggSub"/>
-        <activity android:name=".GameActivity"/>
+        <activity android:name=".GameActivity"
+            android:theme="@style/CustomActivityTheme1"/>
         <activity android:name=".eggTouchGame"/>
         <activity android:name=".SmokeTest"/>
         <activity android:name=".MyAlarmActivity"/>

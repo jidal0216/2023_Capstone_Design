@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,15 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    //EffectActivity 관련
+    private LinearLayout effectContainer;
+    // 여기까지 EffectActivity 과련
+
+    // 리설트 액티비티 관련
+    private TextView savingsTextView;
+    private TextView lifespanTextView;
+    private TextView timeSavedTextView;
+    // 여기까지 리설트액티비티 관련
 
     // HomeActivity 관련
     private TextView textViewSavings;
