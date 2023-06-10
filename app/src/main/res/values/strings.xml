@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">btm_menu_test</string>
+    <string name="angry">피고싶으면 눌러봐!</string>
+    <!-- strings.xml -->
+    <string name="some_id">폐활량 테스트</string>
+</resources>
