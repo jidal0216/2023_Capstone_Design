@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         // String[] texts = {"text1","text2","text3"};
 
         FadingTextView FTV = (FadingTextView) findViewById(R.id.fadingTextView);
-        // FTV.setTexts(texts); //You can use an array resource or a string array as the parameter
-        FTV.setTimeout(10, SECONDS);
+        // FTV.setTexts(texts);
+        FTV.setTimeout(7, SECONDS);
     }
 }

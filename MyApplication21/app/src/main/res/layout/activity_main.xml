@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.tomer.fadingtextview.FadingTextView
-        android:id="@+id/fadingTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:texts="@array/examples"
-        android:textSize="20dp"
-        android:gravity="center"
-        app:timeout="500"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="match_parent"
+        android:gravity="center" >
+        <androidx.cardview.widget.CardView
+            android:layout_width="370dp"
+            android:layout_height="80dp"
+            android:layout_gravity="top"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#e9e9e9">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.tomer.fadingtextview.FadingTextView
+                android:id="@+id/fadingTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                app:texts="@array/examples"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:background="#e9e9e9"
+                android:textStyle="bold"
+                app:timeout="500" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</LinearLayout>
