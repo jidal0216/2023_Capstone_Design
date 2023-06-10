@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,15 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    //EffectActivity 관련
-    private LinearLayout effectContainer;
-    // 여기까지 EffectActivity 과련
-
-    // 리설트 액티비티 관련
-    private TextView savingsTextView;
-    private TextView lifespanTextView;
-    private TextView timeSavedTextView;
-    // 여기까지 리설트액티비티 관련
 
     // HomeActivity 관련
     private TextView textViewSavings;
@@ -71,10 +63,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private BottomNavigationView bottomNavigationView;   //    하단 메뉴바 관련
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
 
         // 여기부터 Shake 기능
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -128,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // 여기까지 HomeActivity 관련
     }
+
 
     // Shake 기능
     @Override
@@ -200,7 +195,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 "해야할 일은 과감히 하라. 결심한 일은 반드시 실행하라.",
                 "최대한의 삶을 살고, 최대한 긍정적인 것에 집중하자.",
                 "최선을 다하고 있다고 말해봤자 소용없다. 필요한 일을 함에 있어서는 반드시 성공해야 한다.",
-                "동기 부여가 당신을 시작하게 한다. 습관이 당신을 계속 움직이게 한다."
+                "동기 부여가 당신을 시작하게 한다. 습관이 당신을 계속 움직이게 한다.",
+                "담배는 끊는 게 아닌 참는 것이다."
         };
 
         Random random = new Random();

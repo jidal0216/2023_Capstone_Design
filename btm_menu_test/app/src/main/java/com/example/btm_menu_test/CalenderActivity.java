@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Locale;
+
+
 
 public class CalenderActivity extends AppCompatActivity
 {
@@ -25,14 +28,17 @@ public class CalenderActivity extends AppCompatActivity
     public TextView diaryTextView, textView2, textView3;
     public EditText contextEditText;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calender_main);
 
+
         //    타이틀바 텍스트
-        getSupportActionBar().setTitle("기록");
+        getSupportActionBar().setTitle("금연일지");
 
         // 타이틀바 배경색 설정
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -78,6 +84,7 @@ public class CalenderActivity extends AppCompatActivity
 
             }
         });
+
     }
 
     public void checkDay(int cYear, int cMonth, int cDay)

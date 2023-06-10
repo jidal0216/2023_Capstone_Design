@@ -8,15 +8,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class SmokeActivity extends AppCompatActivity {
@@ -85,6 +92,8 @@ public class SmokeActivity extends AppCompatActivity {
     /**
      * 날짜 선택 다이얼로그를 표시합니다.
      */
+
+
     private void showDatePickerDialog() {
         final Calendar currentDate = Calendar.getInstance();
         int year = currentDate.get(Calendar.YEAR);
@@ -114,6 +123,7 @@ public class SmokeActivity extends AppCompatActivity {
                 }, year, month, day);
         datePickerDialog.show();
     }
+
 
     /**
      * 흡연 정보를 저장합니다.

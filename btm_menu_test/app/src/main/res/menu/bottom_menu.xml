@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item1"
-        android:title="기록"
+        android:title="일지"
         android:icon="@drawable/calendar"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_item2"
         android:title="금연 팁"
-        android:icon="@drawable/home"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/menu_item3"
-        android:title="유틸"
-        android:icon="@drawable/settings"
+        android:icon="@drawable/idea"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_item4"
         android:title="미션"
         android:icon="@drawable/trophy"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_item3"
+        android:title="유틸"
+        android:icon="@drawable/settings"
         app:showAsAction="always"/>
 </menu>
