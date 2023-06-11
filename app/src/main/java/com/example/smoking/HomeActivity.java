@@ -303,9 +303,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void onButtonQuitSmokingClicked(View view) {
-        // 금연하기 버튼 동작 처리
-    }
+
 //데이터 초기화 메서드
     private void clearSavedData() {
 
